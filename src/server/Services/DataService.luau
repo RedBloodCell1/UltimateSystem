@@ -63,6 +63,11 @@ local function PlayerAdded(player: Player)
 end
 
 local function PlayerRemoving(player: Player)
+	if DataService._objects[player] then
+		DataService._objects[player]:Destroy()
+		DataService._objects[player] = nil
+	end
+
 	local profile = DataService._profiles[player]
 	if profile ~= nil then
 		profile:EndSession()
