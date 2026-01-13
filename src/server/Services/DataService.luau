@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 -- 1. DEPENDENCIES
 local ProfileStore = require(ServerScriptService.ServerPackages.ProfileStore)
 local Template = require(ReplicatedStorage.Shared.Constants.DataTemplate)
+local PlayerStat = require(ReplicatedStorage.Shared.Systems.PlayerStat)
 
 -- 2. CONSTANTS
 local DATA_STORE_KEY = "Test-v1"
@@ -13,6 +14,7 @@ local DATA_STORE_KEY = "Test-v1"
 -- 3. SERVICE SETUP
 local DataService = {}
 DataService._profiles = {} -- [Player] = Profile
+DataService._objects = {} -- [Player] = PlayerStat Object
 
 -- 4. INITIALIZE STORE
 local Store = ProfileStore.New(DATA_STORE_KEY, Template)
@@ -33,8 +35,16 @@ local function PlayerAdded(player: Player)
 		profile:AddUserId(player.UserId) -- GDPR Compliance
 		profile:Reconcile() -- Fills in missing values from Template
 
+		local stats = PlayerStat.new(player, profile.Data)
+		DataService._objects[player] = stats
+
 		-- B. Session Locking
 		profile.OnSessionEnd:Connect(function()
+			if DataService._objects[player] then
+				DataService._objects[player]:Destroy()
+				DataService._objects[player] = nil
+			end
+
 			DataService._profiles[player] = nil
 			player:Kick("Session lock released. Please rejoin.")
 		end)
