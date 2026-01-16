@@ -11,13 +11,14 @@ local PlayerStat = {}
 PlayerStat.__index = PlayerStat
 
 -- CONSTRUCTOR
-function PlayerStat.new(player: Player, data: {})
+function PlayerStat.new(player: Player, data: {}, networkProperty: any)
 	local self = setmetatable({}, PlayerStat)
 
 	self._trove = Trove.new() -- Create Trove Instance for this object
 
 	self._player = player -- Reference to the player
 	self._data = data or {} -- Storage for player stats
+	self._networkProperty = networkProperty -- Reference to the network property for syncing
 
 	self.Changed = self._trove:Construct(Signal) -- Signal for stat changes (In which we connect to trove so if we destroy the PlayerStat, the signal is cleaned up)
 
@@ -34,6 +35,10 @@ function PlayerStat:Set(key: string, value: any)
 		local oldValue = self._data[key]
 		self._data[key] = value
 		self.Changed:Fire(key, oldValue, value)
+
+		if self._networkProperty then
+			self._networkProperty:SetFor(self.player, self._data)
+		end
 	end
 end
 
