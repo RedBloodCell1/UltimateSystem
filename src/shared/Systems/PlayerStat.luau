@@ -18,18 +18,22 @@ function PlayerStat.new(player: Player, data: {}, networkProperty: any)
 
 	self._player = player -- Reference to the player
 	self._data = data or {} -- Storage for player stats
-	self._networkProperty = networkProperty -- Reference to the network property for syncing
 
+	-- Network + Signal Setup
+	self._networkProperty = networkProperty -- Reference to the network property for syncing
 	self.Changed = self._trove:Construct(Signal) -- Signal for stat changes (In which we connect to trove so if we destroy the PlayerStat, the signal is cleaned up)
 
 	return self
 end
 
 -- METHODS
+
+-- Gets a player stat by key
 function PlayerStat:Get(key: string): any
 	return self._data[key]
 end
 
+-- Sets a player stat and fires the Changed signal if the value is different
 function PlayerStat:Set(key: string, value: any)
 	if self._data[key] ~= value then
 		local oldValue = self._data[key]

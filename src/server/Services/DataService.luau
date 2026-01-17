@@ -39,10 +39,10 @@ local function PlayerAdded(player: Player)
 		profile:AddUserId(player.UserId) -- GDPR Compliance
 		profile:Reconcile() -- Fills in missing values from Template
 
-		local stats = PlayerStat.new(player, profile.Data, PlayerDataProperty)
-		DataService._objects[player] = stats
+		local stats = PlayerStat.new(player, profile.Data, PlayerDataProperty) -- Create PlayerStat object
+		DataService._objects[player] = stats -- Store reference to PlayerStat object
 
-		PlayerDataProperty:SetFor(player, profile.Data)
+		PlayerDataProperty:SetFor(player, profile.Data) -- Initialize network property
 
 		-- B. Session Locking
 		profile.OnSessionEnd:Connect(function()
