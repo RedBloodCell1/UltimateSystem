@@ -10,7 +10,7 @@ function CoinController.Start()
 	playerData:Observe(function(data)
 		print("[CLIENT] Received Data Update:")
 		print(data)
-		print("Current Coins:", data.Coins)
+		print("Current Coins:", data.Dollars)
 	end)
 end
 
