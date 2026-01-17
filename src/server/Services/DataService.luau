@@ -3,23 +3,27 @@ local Players = game:GetService("Players")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- 1. DEPENDENCIES
+-- DEPENDENCIES
 local ProfileStore = require(ServerScriptService.ServerPackages.ProfileStore)
 local Template = require(ReplicatedStorage.Shared.Constants.DataTemplate)
 local PlayerStat = require(ReplicatedStorage.Shared.Systems.PlayerStat)
+local NetworkService = require(ServerScriptService.Server.Services.NetworkService)
 
--- 2. CONSTANTS
-local DATA_STORE_KEY = "Test-v1"
+-- CONSTANTS
+local DATA_STORE_KEY = "Test-v1" -- DATA_STORE_KEY can be changed to separate environments
 
--- 3. SERVICE SETUP
+-- SERVICE SETUP
 local DataService = {}
 DataService._profiles = {} -- [Player] = Profile
 DataService._objects = {} -- [Player] = PlayerStat Object
 
--- 4. INITIALIZE STORE
+-- INITIALIZE PROFILE STORE
 local Store = ProfileStore.New(DATA_STORE_KEY, Template)
 
--- 5. PRIVATE FUNCTIONS
+-- SETTING UP NETWORK PROPERTIES
+local PlayerDataProperty = NetworkService.CreateProperty("PlayerData", {})
+
+-- PRIVATE FUNCTIONS
 local function PlayerAdded(player: Player)
 	-- Start the session
 	local profile = Store:StartSessionAsync(`Player_{player.UserId}`, {
@@ -35,8 +39,10 @@ local function PlayerAdded(player: Player)
 		profile:AddUserId(player.UserId) -- GDPR Compliance
 		profile:Reconcile() -- Fills in missing values from Template
 
-		local stats = PlayerStat.new(player, profile.Data)
-		DataService._objects[player] = stats
+		local stats = PlayerStat.new(player, profile.Data, PlayerDataProperty) -- Create PlayerStat object
+		DataService._objects[player] = stats -- Store reference to PlayerStat object
+
+		PlayerDataProperty:SetFor(player, profile.Data) -- Initialize network property
 
 		-- B. Session Locking
 		profile.OnSessionEnd:Connect(function()
@@ -76,12 +82,12 @@ local function PlayerRemoving(player: Player)
 	end
 end
 
--- 6. PUBLIC API
+-- PUBLIC API
 function DataService.GetProfile(player: Player)
 	return DataService._profiles[player]
 end
 
--- 7. BOOTSTRAP
+-- BOOTSTRAP
 function DataService.Start()
 	print("Starting DataService...")
 
