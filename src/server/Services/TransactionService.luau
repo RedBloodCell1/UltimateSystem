@@ -1,6 +1,5 @@
 --!strict
 local ServerScriptService = game:GetService("ServerScriptService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- DEPENDENCIES
 local DataService = require(ServerScriptService.Server.Services.DataService)

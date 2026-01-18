@@ -1,4 +1,3 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local NetworkController = require(script.Parent.NetworkController)
 
 local CoinController = {}
