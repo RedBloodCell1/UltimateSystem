@@ -6,11 +6,13 @@ I have nothing to say, This is my first project in which I tried my best to make
 1. Integrating Roblox Studio With Rojo
 2. Using wally as package manager
 3. OOP
+4. Communication between services
 
 ## What library have i learned to use by making this system:
 1. ProfileStore (loleris)
 2. Signal (sleitnick)
 3. Trove (sleitnick)
+4. Comm (sleitnick)
 
 ## What I am planning to learn next:
 1. RobloxTS
