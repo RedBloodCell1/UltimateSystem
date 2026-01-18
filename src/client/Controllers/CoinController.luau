@@ -1,4 +1,3 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local NetworkController = require(script.Parent.NetworkController)
 
 local CoinController = {}
@@ -10,7 +9,7 @@ function CoinController.Start()
 	playerData:Observe(function(data)
 		print("[CLIENT] Received Data Update:")
 		print(data)
-		print("Current Coins:", data.Coins)
+		print("Current Coins:", data.Dollars)
 	end)
 end
 

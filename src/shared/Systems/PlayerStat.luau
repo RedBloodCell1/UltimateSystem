@@ -48,10 +48,7 @@ end
 
 function PlayerStat:Destroy()
 	self._trove:Destroy() -- Destroy the Signal and clean object memory
-
-	-- Set the table to nil to help with Luau garbage collection
-	table.clear(self)
-	setmetatable(self, nil)
+	table.clear(self) -- Clear the table to help with Luau garbage collection
 end
 
 return PlayerStat

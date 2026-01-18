@@ -10,7 +10,7 @@ local PlayerStat = require(ReplicatedStorage.Shared.Systems.PlayerStat)
 local NetworkService = require(ServerScriptService.Server.Services.NetworkService)
 
 -- CONSTANTS
-local DATA_STORE_KEY = "Test-v1" -- DATA_STORE_KEY can be changed to separate environments
+local DATA_STORE_KEY = "Test-v2" -- DATA_STORE_KEY can be changed to separate environments
 
 -- SERVICE SETUP
 local DataService = {}
@@ -39,11 +39,6 @@ local function PlayerAdded(player: Player)
 		profile:AddUserId(player.UserId) -- GDPR Compliance
 		profile:Reconcile() -- Fills in missing values from Template
 
-		local stats = PlayerStat.new(player, profile.Data, PlayerDataProperty) -- Create PlayerStat object
-		DataService._objects[player] = stats -- Store reference to PlayerStat object
-
-		PlayerDataProperty:SetFor(player, profile.Data) -- Initialize network property
-
 		-- B. Session Locking
 		profile.OnSessionEnd:Connect(function()
 			if DataService._objects[player] then
@@ -57,8 +52,14 @@ local function PlayerAdded(player: Player)
 
 		-- C. Final Safety Check
 		if player.Parent == Players then
-			DataService._profiles[player] = profile
-			print(`[DataService]: Profile loaded for {player.Name}`)
+			DataService._profiles[player] = profile -- Store reference to player profile
+
+			local stats = PlayerStat.new(player, profile.Data, PlayerDataProperty) -- Create PlayerStat object
+			DataService._objects[player] = stats -- Store reference to PlayerStat object
+
+			print(`[DataService]: Session started for {player.Name}`)
+
+			PlayerDataProperty:SetFor(player, profile.Data) -- Initialize network property
 		else
 			profile:EndSession()
 		end
@@ -83,8 +84,17 @@ local function PlayerRemoving(player: Player)
 end
 
 -- PUBLIC API
+-- Get player profile
 function DataService.GetProfile(player: Player)
 	return DataService._profiles[player]
+end
+
+-- Update player object stat
+function DataService.UpdateStat(player: Player, key: string, value: any)
+	local statObject = DataService._objects[player]
+	if statObject then
+		statObject:Set(key, value)
+	end
 end
 
 -- BOOTSTRAP
