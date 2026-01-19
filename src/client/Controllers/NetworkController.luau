@@ -21,7 +21,7 @@ function NetworkController.GetSignal(name: string)
 end
 
 -- Access a remote function
-function NetworkController.BindFunction(name: string)
+function NetworkController.GetFunction(name: string)
 	return GlobalComm:GetFunction(name)
 end
 
