@@ -1,8 +1,11 @@
 --!strict
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 -- DEPENDENCIES
+local GameFormula = require(ReplicatedStorage.Shared.Utils.GameFormula)
+local DataService = require(script.Parent.DataService)
 local NetworkService = require(script.Parent.NetworkService)
 local TransactionService = require(script.Parent.TransactionService)
 
@@ -16,11 +19,19 @@ local lastPassiveCycle = 0
 
 -- HELPER FUNCTIONS
 local function GetClickCooldown(player: Player): number
-	return 1.0
+	local profile = DataService.GetProfile(player)
+	if not profile then
+		return 1.0
+	end
+	return GameFormula.GetClickCooldown(profile.Data.Upgrades.ClickSpeedLevel)
 end
 
 local function GetClickValue(player: Player): number
-	return 1
+	local profile = DataService.GetProfile(player)
+	if not profile then
+		return 1
+	end
+	return GameFormula.GetClickValue(profile.Data.Upgrades.ClickPowerLevel)
 end
 
 local function GetPassiveValue(player: Player): number
@@ -47,7 +58,7 @@ function IncomeService.ProcessClick(player: Player): boolean
 end
 
 -- NETWORK SETUP
-NetworkService.BindFunction("ClickRequest", function(player)
+NetworkService.CreateFunction("ClickRequest", function(player)
 	return IncomeService.ProcessClick(player)
 end)
 

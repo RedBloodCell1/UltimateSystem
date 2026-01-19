@@ -5,10 +5,10 @@ return {
 	Dollars = 0,
 
 	-- GAMEPLAY STATS (We save levels)
-	Upgrade = {
-		ClickSpeedLevel = 1,
+	Upgrades = {
+		ClickSpeedLevel = 0,
 		PassiveIncomeLevel = 0,
-		ClickPowerLevel = 1,
+		ClickPowerLevel = 0,
 	},
 
 	-- METADATA (Good Practice)

@@ -21,7 +21,7 @@ function NetworkService.CreateSignal(name: string)
 end
 
 -- Binds a remote function
-function NetworkService.BindFunction(name: string, callback: (player: Player, ...any) -> ...any)
+function NetworkService.CreateFunction(name: string, callback: (player: Player, ...any) -> ...any)
 	return GlobalComm:BindFunction(name, callback)
 end
 
