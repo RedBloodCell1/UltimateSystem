@@ -8,21 +8,25 @@ local TransactionService = {}
 
 -- PUBLIC API
 
--- MANAGE MONEY
--- usage: TransactionService.Award(player, 100, "Money Clicked")
-function TransactionService.Award(player: Player, amount: number, reason: string): boolean
+-- PROCESS TRANSACTION
+function TransactionService.ProcessTransaction(player: Player, amount: number, reason: string): boolean
 	-- Getting player profile
 	local profile = DataService.GetProfile(player)
 	if not profile then
 		return false
 	end
 
-	-- Math
-	profile.Data.Dollars += amount
-	DataService.UpdateStat(player, "Dollars", profile.Data.Dollars)
-	DataService.UpdateProperty(player)
+	local currentDollars = profile.Data.Dollars
+	local newDollars = currentDollars + amount
 
-	print(`[Economy]: Give {amount} to {player.Name} | Reason: {reason} | New Bal: {profile.Data.Dollars}`)
+	if newDollars < 0 then
+		print(`[Economy]: Transaction Failed for {player.Name} (Not enough money)`)
+		return false
+	end
+
+	DataService.Set(player, "Dollars", newDollars)
+
+	print(`[Economy]: {amount > 0 and "+" or ""}{amount} | {player.Name} | Reason: {reason}`)
 	return true
 end
 

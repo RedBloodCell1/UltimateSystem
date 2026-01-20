@@ -54,7 +54,7 @@ function IncomeService.ProcessClick(player: Player): boolean
 
 	-- REWARD
 	local amount = GetClickValue(player)
-	return TransactionService.Award(player, amount, "Button Clicked")
+	return TransactionService.ProcessTransaction(player, amount, "Button Clicked")
 end
 
 -- NETWORK SETUP
@@ -74,7 +74,7 @@ function IncomeService.StartPassiveLoop()
 			for _, player in Players:GetPlayers() do
 				local income = GetPassiveValue(player)
 				if income > 0 then
-					TransactionService.Award(player, income, "Passive Income")
+					TransactionService.ProcessTransaction(player, income, "Passive Income")
 				end
 			end
 		end
