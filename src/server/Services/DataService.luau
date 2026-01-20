@@ -97,6 +97,13 @@ function DataService.UpdateStat(player: Player, key: string, value: any)
 	end
 end
 
+function DataService.UpdateProperty(player: Player)
+	local profile = DataService._profiles[player]
+	if profile then
+		PlayerDataProperty:SetFor(player, profile.Data)
+	end
+end
+
 -- BOOTSTRAP
 function DataService.Start()
 	print("Starting DataService...")

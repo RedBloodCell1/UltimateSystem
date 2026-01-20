@@ -1,16 +1,26 @@
 --!strict
 local Workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local StarterPlayer = game:GetService("StarterPlayer")
 
 -- REQUIRE
+local VisualFX = require(StarterPlayer.StarterPlayerScripts.Client.Utils.VisualFX)
 local GameFormula = require(ReplicatedStorage.Shared.Utils.GameFormula)
 local NetworkController = require(script.Parent.NetworkController)
 
 local ClickController = {}
 
 -- SETUP VARIABLES
+local CLICK_PART_NAME = "ClickPart"
+local CLICK_TEXT_COLOR = Color3.fromRGB(85, 255, 127)
+
 local button: TextButton = nil
-local isWaiting = false -- Debounce
+local clickPart: Part = nil
+local clickSound = nil
+
+local isWaiting: boolean = false -- Debounce
+
+local cachedData: any = nil
 
 -- THE RANDOMIZER FUNCTION
 local function RepositionButton()
@@ -31,19 +41,26 @@ function ClickController.HandleClick()
 		return
 	end
 
-	local playerProperty = NetworkController.GetProperty("PlayerData")
-	local data = playerProperty:Get()
+	VisualFX.PlaySound(clickSound) -- Play Sound
 
-	-- Check if data is loaded or not, Default to level 0
-	local clickLevel = 0
-	if data and data.Upgrades then
-		clickLevel = data.Upgrades.ClickSpeedLevel
-	end
+	local clickLevel = cachedData.Upgrades.ClickSpeedLevel
+	local powerLevel = cachedData.Upgrades.ClickPowerLevel
+
+	local amount = GameFormula.GetClickValue(powerLevel)
+
+	print(cachedData.Dollars)
+
+	local partSize = clickPart.Size
+	local buttonPos = button.Position
+
+	local offsetX = (buttonPos.X.Scale - 0.5) * partSize.X
+	local offsetY = (0.5 - buttonPos.Y.Scale) * partSize.Y
+
+	local myOffset = Vector3.new(offsetX, offsetY, 0.5)
+	VisualFX.FloatText(clickPart, "+" .. tostring(amount), CLICK_TEXT_COLOR, myOffset)
 
 	isWaiting = true
-
-	-- Hide the button immediately after click
-	button.Visible = false
+	button.Visible = false -- Hide the button immediately after click
 
 	-- Fire the server!
 	local clickRequest = NetworkController.GetFunction("ClickRequest")
@@ -52,7 +69,6 @@ function ClickController.HandleClick()
 	end
 
 	local cooldownTime = GameFormula.GetClickCooldown(clickLevel)
-	print("COOLDOWN TIME " .. cooldownTime)
 	task.wait(cooldownTime)
 
 	-- Randomize button position
@@ -66,17 +82,21 @@ end
 -- 5. INITIALIZATION
 function ClickController.Start()
 	-- Get the physical button in the world
-	local clickPart = Workspace:WaitForChild("ClickPart")
+	clickPart = Workspace:WaitForChild(CLICK_PART_NAME)
 	local gui = clickPart:WaitForChild("ClickGui")
-	button = gui:WaitForChild("DollarButton")
+	button = gui:WaitForChild("DollarButton") :: TextButton
+	clickSound = clickPart:FindFirstChild("ClickSound") :: Sound
 
-	-- Initial setup: Move to a random spot and make sure it's visible
-	RepositionButton()
+	local playerProperty = NetworkController.GetProperty("PlayerData")
 
-	-- Connect the event
-	button.Activated:Connect(ClickController.HandleClick)
+	playerProperty:Observe(function(newData)
+		cachedData = newData
+	end)
 
-	print("[ClickController]: Start Working")
+	RepositionButton() -- Move button to a random spot on the part
+	button.Activated:Connect(ClickController.HandleClick) -- Connect the event
+
+	print("[ClickController]: System Started")
 end
 
 return ClickController
