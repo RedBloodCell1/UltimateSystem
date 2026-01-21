@@ -43,8 +43,8 @@ function ClickController.HandleClick()
 
 	VisualFX.PlaySound(clickSound) -- Play Sound
 
-	local clickLevel = cachedData.Upgrades.ClickSpeedLevel
-	local powerLevel = cachedData.Upgrades.ClickPowerLevel
+	local clickLevel = cachedData.Upgrades.ActiveIncome
+	local powerLevel = cachedData.Upgrades.SelfWorth
 
 	local amount = GameFormula.GetClickValue(powerLevel)
 

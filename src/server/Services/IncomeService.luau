@@ -23,7 +23,7 @@ local function GetClickCooldown(player: Player): number
 	if not profile then
 		return 1.0
 	end
-	return GameFormula.GetClickCooldown(profile.Data.Upgrades.ClickSpeedLevel)
+	return GameFormula.GetClickCooldown(profile.Data.Upgrades.ActiveIncome)
 end
 
 local function GetClickValue(player: Player): number
@@ -31,7 +31,7 @@ local function GetClickValue(player: Player): number
 	if not profile then
 		return 1
 	end
-	return GameFormula.GetClickValue(profile.Data.Upgrades.ClickPowerLevel)
+	return GameFormula.GetClickValue(profile.Data.Upgrades.SelfWorth)
 end
 
 local function GetPassiveValue(player: Player): number
@@ -62,6 +62,7 @@ NetworkService.CreateFunction("ClickRequest", function(player)
 	return IncomeService.ProcessClick(player)
 end)
 
+--[[
 -- Start Passive Loop
 function IncomeService.StartPassiveLoop()
 	-- Use RunService.Heartbeat to run a loop.
@@ -80,6 +81,7 @@ function IncomeService.StartPassiveLoop()
 		end
 	end)
 end
+]]
 
 -- INITIALIZATION
 function IncomeService.Start()
