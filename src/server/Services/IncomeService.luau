@@ -1,7 +1,7 @@
 --!strict
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
+-- local RunService = game:GetService("RunService")
 
 -- DEPENDENCIES
 local GameFormula = require(ReplicatedStorage.Shared.Utils.GameFormula)
@@ -14,8 +14,8 @@ local IncomeService = {}
 -- VARIABLES
 local lastClickTimes = {}
 
-local PASSIVE_INCOME_INTERVAL = 1.0
-local lastPassiveCycle = 0
+-- local PASSIVE_INCOME_INTERVAL = 1.0
+-- local lastPassiveCycle = 0
 
 -- HELPER FUNCTIONS
 local function GetClickCooldown(player: Player): number
@@ -93,7 +93,7 @@ function IncomeService.Start()
 	end)
 
 	-- Start the passive loop
-	IncomeService.StartPassiveLoop()
+	-- IncomeService.StartPassiveLoop()
 end
 
 return IncomeService
