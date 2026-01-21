@@ -6,9 +6,9 @@ return {
 
 	-- GAMEPLAY STATS (We save levels)
 	Upgrades = {
-		ClickSpeedLevel = 0,
-		PassiveIncomeLevel = 0,
-		ClickPowerLevel = 0,
+		ActiveIncome = 0, -- Dollar spawn cooldown (1 Second to 0 Second)
+		JobNumber = 0, -- How many Dollars can appear on the screen
+		SelfWorth = 0, -- How much does dollars give you
 	},
 
 	-- METADATA (Good Practice)

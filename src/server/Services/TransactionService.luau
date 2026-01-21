@@ -8,52 +8,26 @@ local TransactionService = {}
 
 -- PUBLIC API
 
--- ADDING MONEY
--- usage: TransactionService.Award(player, 100, "Money Clicked")
-function TransactionService.Award(player: Player, amount: number, reason: string): boolean
-	-- Sanity Check
-	if amount <= 0 then
-		warn(`[TransactionService] can't reward <= 0 dollars`)
-		return false
-	end
-
+-- PROCESS TRANSACTION
+function TransactionService.ProcessTransaction(player: Player, amount: number, reason: string): boolean
 	-- Getting player profile
 	local profile = DataService.GetProfile(player)
 	if not profile then
 		return false
 	end
 
-	-- Math
-	profile.Data.Dollars += amount
-	DataService.UpdateStat(player, "Dollars", profile.Data.Dollars)
+	local currentDollars = profile.Data.Dollars
+	local newDollars = currentDollars + amount
 
-	print(`[Economy]: +${amount} to {player.Name} | Reason: {reason} | New Bal: {profile.Data.Dollars}`)
+	if newDollars < 0 then
+		print(`[Economy]: Transaction Failed for {player.Name} (Not enough money)`)
+		return false
+	end
+
+	DataService.Set(player, "Dollars", newDollars)
+
+	print(`[Economy]: {amount > 0 and "+" or ""}{amount} | {player.Name} | Reason: {reason}`)
 	return true
-end
-
--- SPENDING MONEY
--- usage: TransactionService.Purchase(player, 50, "Active Income")
-function TransactionService.Purchase(player: Player, cost: number, itemId: string): boolean
-	if cost < 0 then
-		return false
-	end
-
-	local profile = DataService.GetProfile(player)
-	if not profile then
-		return false
-	end
-
-	-- Validation
-	if profile.Data.Dollars >= cost then
-		-- Transaction
-		profile.Data.Dollars -= cost
-		DataService.UpdateStat(player, "Dollars", profile.Data.Dollars)
-
-		print(`[Economy]: {player.Name} spent ${cost} on {itemId}`)
-		return true -- Success
-	else
-		return false -- Insufficient Funds
-	end
 end
 
 -- GET BALANCE

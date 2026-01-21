@@ -90,11 +90,21 @@ function DataService.GetProfile(player: Player)
 end
 
 -- Update player object stat
-function DataService.UpdateStat(player: Player, key: string, value: any)
+function DataService.Set(player: Player, key: string, value: any)
+	local profile = DataService._profiles[player]
 	local statObject = DataService._objects[player]
+
+	if not profile then
+		return
+	end
+
+	profile.Data[key] = value
+
 	if statObject then
 		statObject:Set(key, value)
 	end
+
+	PlayerDataProperty:SetFor(player, profile.Data)
 end
 
 -- BOOTSTRAP
