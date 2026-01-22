@@ -2,9 +2,35 @@ local GameFormula = {}
 
 -- CONFIGURATION
 local UPGRADE_CONFIG = {
-	ActiveIncome = { BasePrice = 100, Exponent = 1.5, MaxLevel = 10 },
-	JobNumber = { BasePrice = 500, Exponent = 2.0, MaxLevel = 5 },
-	SelfWorth = { BasePrice = 50, Exponent = 1.2, MaxLevel = 50 },
+	ActiveIncome = {
+		-- DISPLAY DATA (Static)
+		DisplayName = "Spawn Cooldown",
+		Description = "Reduce $ spawn time",
+		ImageId = "rbxassetid://1234567890",
+
+		-- MATH DATA (Logic)
+		BasePrice = 100,
+		Exponent = 1.5,
+		MaxLevel = 10,
+	},
+	JobNumber = {
+		DisplayName = "Job Vacancy",
+		Description = "Increase $ quantity on screen.",
+		ImageId = "rbxassetid://1234567890",
+
+		BasePrice = 500,
+		Exponent = 2.0,
+		MaxLevel = 5,
+	},
+	SelfWorth = {
+		DisplayName = "Self Worth",
+		Description = "Increases $ value.",
+		ImageId = "rbxassetid://1234567890",
+
+		BasePrice = 50,
+		Exponent = 1.2,
+		MaxLevel = 50,
+	},
 }
 
 -- PUBLIC API
@@ -17,7 +43,7 @@ function GameFormula.GetUpgradeCost(upgradeName: string, currentLevel: number): 
 	end -- Invalid upgrade name
 
 	if currentLevel >= config.MaxLevel then
-		return nil -- Maxed out!
+		return nil -- Maxed out
 	end
 
 	-- Formula: Base * (Exponent ^ Level)
@@ -25,7 +51,7 @@ function GameFormula.GetUpgradeCost(upgradeName: string, currentLevel: number): 
 	return math.floor(cost)
 end
 
--- 2. Check if player is maxed
+-- Check if player is maxed
 function GameFormula.IsMaxLevel(upgradeName: string, currentLevel: number): boolean
 	local config = UPGRADE_CONFIG[upgradeName]
 	if not config then
@@ -34,7 +60,7 @@ function GameFormula.IsMaxLevel(upgradeName: string, currentLevel: number): bool
 	return currentLevel >= config.MaxLevel
 end
 
--- 3. Calculate Income (Used by Click/Income Controller)
+-- Calculate Income (Used by Click/Income Controller)
 function GameFormula.GetClickValue(selfWorthLevel: number): number
 	return 1 + (selfWorthLevel * 1) -- Each level adds $1
 end
@@ -42,6 +68,10 @@ end
 function GameFormula.GetClickCooldown(activeIncomeLevel: number): number
 	-- Level 0 = 1.0s, Level 10 = 0.1s
 	return math.max(0.1, 1.0 - (activeIncomeLevel * 0.09))
+end
+
+function GameFormula.GetUpgradeInfo(upgradeName: string)
+	return UPGRADE_CONFIG[upgradeName]
 end
 
 return GameFormula
