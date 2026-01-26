@@ -6,7 +6,7 @@ local Controllers = script.Controllers
 
 local loadedControllers = {}
 
--- PHASE 1: REQUIRE (Load them into memory)
+-- REQUIRE (Load them into memory)
 for _, module in Controllers:GetChildren() do
 	if module:IsA("ModuleScript") then
 		local success, result = pcall(function()
@@ -22,9 +22,9 @@ for _, module in Controllers:GetChildren() do
 	end
 end
 
--- PHASE 2: START (Wake them up)
+-- START (Wake them up)
 print("--------------------------------")
-print("[CLIENT]: Starting Controllers...")
+print("[CLIENT]: Starting Controllers")
 
 for name, controller in loadedControllers do
 	if type(controller.Start) == "function" then
@@ -40,5 +40,5 @@ for name, controller in loadedControllers do
 	end
 end
 
-print("[CLIENT]: Framework Initialized")
+print("[CLIENT]: Controllers Started")
 print("--------------------------------")

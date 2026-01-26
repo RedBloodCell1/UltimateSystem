@@ -9,16 +9,16 @@ local UPGRADE_CONFIG = {
 		ImageId = "rbxassetid://1234567890",
 
 		-- MATH DATA (Logic)
-		BasePrice = 100,
+		BasePrice = 30,
 		Exponent = 1.5,
 		MaxLevel = 10,
 	},
 	JobNumber = {
 		DisplayName = "Job Vacancy",
-		Description = "Increase $ quantity on screen.",
+		Description = "Increase $ quantity.",
 		ImageId = "rbxassetid://1234567890",
 
-		BasePrice = 500,
+		BasePrice = 100,
 		Exponent = 2.0,
 		MaxLevel = 5,
 	},
@@ -27,7 +27,7 @@ local UPGRADE_CONFIG = {
 		Description = "Increases $ value.",
 		ImageId = "rbxassetid://1234567890",
 
-		BasePrice = 50,
+		BasePrice = 5,
 		Exponent = 1.2,
 		MaxLevel = 50,
 	},

@@ -37,7 +37,7 @@ function TransactionService.GetBalance(player: Player): number
 end
 
 function TransactionService.Start()
-	print("[TransactionService]: Economy System Online")
+	print("[TransactionService]: LOADED")
 end
 
 return TransactionService

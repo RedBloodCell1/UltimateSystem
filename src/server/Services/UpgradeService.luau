@@ -64,7 +64,7 @@ NetworkService.CreateFunction("PurchaseUpgrade", function(player, upgradeName)
 end)
 
 function UpgradeService.Start()
-	print("[UpgradeService]: Shop System Online")
+	print("[UpgradeService]: LOADED")
 end
 
 return UpgradeService

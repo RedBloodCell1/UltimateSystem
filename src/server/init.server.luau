@@ -20,10 +20,10 @@ local function Boot()
 			if success then
 				local service = result
 				if type(service) == "table" and service.Start then
+					print(`[Bootstrapper]: Started {module.Name}`)
 					task.spawn(function()
 						service.Start()
 					end)
-					print(`[Bootstrapper]: Started {module.Name}`)
 				end
 			else
 				warn(`[Bootstrapper]: Failed to load {module.Name}: {result}`)

@@ -85,7 +85,7 @@ end
 
 -- INITIALIZATION
 function IncomeService.Start()
-	print("[IncomeService]: Initialized")
+	print("[IncomeService]: LOADED")
 
 	-- Clean Up
 	Players.PlayerRemoving:Connect(function(player)

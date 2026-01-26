@@ -27,7 +27,7 @@ end
 
 -- 4. STARTUP
 function NetworkService.Start()
-	print("[NetworkService]: Global bridge initialized.")
+	print("[NetworkService]: LOADED")
 end
 
 return NetworkService

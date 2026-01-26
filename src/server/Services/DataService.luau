@@ -10,7 +10,7 @@ local PlayerStat = require(ReplicatedStorage.Shared.Systems.PlayerStat)
 local NetworkService = require(ServerScriptService.Server.Services.NetworkService)
 
 -- CONSTANTS
-local DATA_STORE_KEY = "Test-v4" -- DATA_STORE_KEY can be changed to separate environments
+local DATA_STORE_KEY = "Test-v5" -- DATA_STORE_KEY can be changed to separate environments
 
 -- SERVICE SETUP
 local DataService = {}
@@ -109,7 +109,7 @@ end
 
 -- BOOTSTRAP
 function DataService.Start()
-	print("Starting DataService...")
+	print("[DataService]: LOADED")
 
 	-- Loop through existing players (in case of lag/late load)
 	for _, player in Players:GetPlayers() do

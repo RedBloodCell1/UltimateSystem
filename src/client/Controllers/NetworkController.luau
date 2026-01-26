@@ -27,7 +27,7 @@ end
 
 -- 4. STARTUP
 function NetworkController.Start()
-	print("[NetworkController]: Global bridge initialized.")
+	print("[NetworkController]: LOADED")
 end
 
 return NetworkController

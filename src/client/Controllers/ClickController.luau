@@ -96,7 +96,7 @@ function ClickController.Start()
 	RepositionButton() -- Move button to a random spot on the part
 	button.Activated:Connect(ClickController.HandleClick) -- Connect the event
 
-	print("[ClickController]: System Started")
+	print("[ClickController]: LOADED")
 end
 
 return ClickController
